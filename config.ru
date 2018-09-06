@@ -3,6 +3,14 @@ require "bundler/setup"
 require "coupler-api"
 require "coupler-frontend"
 
+class Redirector
+  def call(env)
+    response = Rack::Response.new
+    response.redirect("/app/")
+    response.finish
+  end
+end
+
 # Figure out configuration path
 path =
   if ENV['COUPLER_HOME']
@@ -39,30 +47,26 @@ if !File.exist?(storage_path)
   Dir.mkdir(storage_path)
 end
 
+options = {
+  "storage_path" => storage_path,
+  "database_uri" => File.join("jdbc:sqlite:#{path}", "coupler.sqlite3"),
+  "supervisor_style" => "thread"
+}
+
+builder = CouplerAPI::Builder.new(options)
 app = Rack::Builder.new do
   map "/api" do
-    options = {
-      storage_path: storage_path,
-      uri: "jdbc:sqlite://#{path}/coupler.sqlite"
-    }
-    builder = CouplerAPI::Builder.new(options)
-    api = CouplerAPI::Builder.create(options)
-    run api
+    run builder.app
   end
 
-  use Class.new {
-    def initialize(app)
-      @app = app
-    end
+  map "/app" do
+    run CouplerFrontend.new
+  end
 
-    def call(env)
-      if env["PATH_INFO"] == "/"
-        env["PATH_INFO"] += "index.html"
-      end
-      @app.call(env)
-    end
-  }
-
-  run Rack::File.new(CouplerFrontend::PATH)
+  run Redirector.new
 end
+
+supervisor = builder.supervisor
+supervisor.start
+
 run app
