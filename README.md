@@ -12,3 +12,8 @@ How to run
 1. Download release JAR file here: https://github.com/coupler/coupler-app/releases
 2. Run the following command from a terminal: `java -jar coupler-app.jar`
 3. Open your web browser to the following address: http://127.0.0.1:13603
+
+Notes
+-----
+
+A recent version of Java is required to run the Coupler application bundle.
