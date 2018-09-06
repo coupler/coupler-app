@@ -9,7 +9,7 @@ Warbler::Config.new do |config|
   # - *executable*: embed a web server and make the war executable
   # - *runnable*: allows to run bin scripts e.g. `java -jar my.war -S rake -T`
   # - *compiled*: compile .rb files to .class files
-  config.features = %w(executable)
+  config.features = %w(executable runnable)
 
   # Application directories to be included in the webapp.
   # config.dirs = %w(app config db lib log script vendor tmp)
@@ -82,7 +82,7 @@ Warbler::Config.new do |config|
   # config.jar_name = "mywar"
 
   # File extension for the archive. Defaults to either 'jar' or 'war'.
-  # config.jar_extension = "jar"
+  config.jar_extension = "jar"
 
   # Destionation for the created archive. Defaults to project's root directory.
   # config.autodeploy_dir = "dist/"
@@ -138,7 +138,7 @@ Warbler::Config.new do |config|
   # web.xml by default. If there is an .erb-File it will be processed
   # with webxml-config. You may want to exclude this file via
   # config.excludes.
-  # config.webinf_files += FileList["jboss-web.xml"]
+  config.webinf_files += FileList["config/webserver.properties"]
 
   # Files to be included in the root of the webapp.  Note that files in public
   # will have the leading 'public/' part of the path stripped during staging.
@@ -179,4 +179,7 @@ Warbler::Config.new do |config|
 
   # JNDI data source name
   # config.webxml.jndi = 'jdbc/rails'
+
+  # Workaround for bug: https://github.com/jruby/warbler/issues/432
+  config.init_contents << StringIO.new("\nGem.clear_paths\nGem.path\n\n")
 end
