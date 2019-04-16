@@ -17,3 +17,29 @@ Notes
 -----
 
 A recent version of Java is required to run the Coupler application bundle.
+
+How to build
+------------
+
+The build process depends on [JRuby](https://www.jruby.org/). If you have a Mac,
+you can use [homebrew](https://formulae.brew.sh/formula/jruby) to install JRuby.
+You can also use a Ruby version manager like [rvm](https://rvm.io/) or
+[rbenv](https://github.com/rbenv/rbenv) (with the
+[ruby-build](https://github.com/rbenv/ruby-build) plugin) to install and manage
+JRuby. There's also an Ubuntu package for JRuby.
+[Check here](https://www.jruby.org/getting-started) for more ways to install
+it.
+
+Once you have JRuby, you'll need to install the [bundler](https://bundler.io/)
+gem via `jgem install bundler`. Once that's installed, run these commands from
+a terminal:
+
+```
+git clone https://github.com/coupler/coupler-app.git
+cd coupler-app
+jruby -S bundle install
+jruby -S bundle exec warble
+```
+
+This process should create a file called `coupler-app.jar`, which can be run
+with Java to start Coupler.
