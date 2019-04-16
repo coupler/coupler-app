@@ -30,16 +30,19 @@ JRuby. There's also an Ubuntu package for JRuby.
 [Check here](https://www.jruby.org/getting-started) for more ways to install
 it.
 
-Once you have JRuby, you'll need to install the [bundler](https://bundler.io/)
-gem via `jgem install bundler`. Once that's installed, run these commands from
-a terminal:
+Once you have JRuby, run these commands from a terminal:
 
 ```
 git clone https://github.com/coupler/coupler-app.git
 cd coupler-app
+jruby -S gem install bundler --version '< 2'
 jruby -S bundle install
 jruby -S bundle exec warble
 ```
 
 This process should create a file called `coupler-app.jar`, which can be run
 with Java to start Coupler.
+
+Please note that the JAR creation process requires Bundler version < 2, at the
+time of this writing. JRuby JARs contain Bundler 1, and if you use Bundler 2 on
+your system, a conflict will occur.
