@@ -1,7 +1,7 @@
 require "rubygems"
 require "bundler/setup"
-require "coupler-api"
-require "coupler-frontend"
+require "coupler/api"
+require "coupler/frontend"
 
 class Redirector
   def call(env)
@@ -53,14 +53,14 @@ options = {
   "supervisor_style" => "thread"
 }
 
-builder = CouplerAPI::Builder.new(options)
+builder = Coupler::API::Builder.new(options)
 app = Rack::Builder.new do
   map "/api" do
     run builder.app
   end
 
   map "/app" do
-    run CouplerFrontend.new
+    run Coupler::Frontend.new
   end
 
   run Redirector.new
